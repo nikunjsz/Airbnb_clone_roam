@@ -23,13 +23,13 @@ const themeInitScript = `
   (function() {
     try {
       var saved = localStorage.getItem('roam-theme');
-      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (saved === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
-      } else if (saved === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
       } else if (saved === 'system') {
         var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
       }
     } catch (e) {}
   })();

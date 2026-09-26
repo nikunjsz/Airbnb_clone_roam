@@ -24,9 +24,9 @@ export function AccountMenu() {
   const [error, setError] = useState("");
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("roam-theme") as ThemeMode) || "system";
+      return (localStorage.getItem("roam-theme") as ThemeMode) || "light";
     }
-    return "system";
+    return "light";
   });
   const toast = useToast();
 
