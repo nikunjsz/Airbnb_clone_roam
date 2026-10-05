@@ -16,7 +16,10 @@ import type {
  * Target path: GET /health
  */
 export async function getHealth(signal?: AbortSignal): Promise<HealthResponse> {
-  const envUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+  if (typeof window !== "undefined") {
+    return apiFetch<HealthResponse>(`${window.location.origin}/api/health`, { signal, cache: "no-store" });
+  }
+  const envUrl = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
   // Remove trailing slash and /api/v1 prefix if present to hit root /health
   const rootUrl = envUrl.replace(/\/+$/, "").replace(/\/api\/v1$/, "");
   return apiFetch<HealthResponse>(`${rootUrl}/health`, { signal, cache: "no-store" });
@@ -131,4 +134,3 @@ export async function createReview(
     body: JSON.stringify(payload),
   });
 }
-

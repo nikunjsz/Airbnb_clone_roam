@@ -2,10 +2,11 @@ import { ApiError } from "./errors";
 
 /**
  * Resolves the API base URL.
- * Environment variable NEXT_PUBLIC_API_URL takes precedence.
- * Defaults to http://localhost:8000/api/v1 for local development.
+ * Browser requests use the frontend's proxy so session cookies stay first-party.
+ * Server requests use the backend URL directly.
  */
 function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") return "/api/v1";
   if (typeof window === "undefined" && process.env.INTERNAL_API_URL) {
     return process.env.INTERNAL_API_URL.trim().replace(/\/+$/, "");
   }
@@ -45,7 +46,7 @@ export async function apiFetch<T>(endpoint: string, options: RequestOptions = {}
   }
 
   if (params) {
-    const urlObj = new URL(fullUrl);
+    const urlObj = new URL(fullUrl, typeof window !== "undefined" ? window.location.origin : undefined);
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== "") {
         if (Array.isArray(value)) value.forEach((item) => urlObj.searchParams.append(key, item));

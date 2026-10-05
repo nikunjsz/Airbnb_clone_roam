@@ -49,6 +49,21 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+### Deployment authentication
+
+Browser API requests go through the Next.js `/api/v1` proxy. This keeps the
+HTTP-only login cookie on the frontend domain, including when Vercel and Render
+use different domains. Login, signup, demo profiles, and logout share this path.
+The health check is proxied through `/api/health`.
+
+Set `NEXT_PUBLIC_API_URL` to the backend URL including `/api/v1` before building
+the frontend (for example, `https://roam-backend-3miv.onrender.com/api/v1`).
+`INTERNAL_API_URL`, when set, overrides the backend destination for server requests
+and the proxy. Rebuild/redeploy after changing either URL. Set `APP_ENV=production`
+on the deployed backend to mark session cookies Secure; leave it unset for local
+HTTP development. Cookies retain `SameSite=Lax` because browser requests now
+stay on the frontend's domain.
+
 ---
 
 ## 🔑 Demo Accounts
@@ -132,5 +147,4 @@ cd frontend
 npm run lint
 npm run build
 ```
-
 

@@ -6,7 +6,9 @@ RUN pnpm install --frozen-lockfile
 
 FROM dependencies AS build
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+ARG INTERNAL_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV INTERNAL_API_URL=$INTERNAL_API_URL
 COPY . .
 RUN npm run build
 
